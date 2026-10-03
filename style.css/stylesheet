@@ -4,3 +4,10 @@ body {
 	 */
   font: 100%/1.5 system-ui;
 }
+
+<style>
+  .shrunk-image {
+    width: 300px;
+    height: auto;
+  }
+</style>
