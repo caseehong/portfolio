@@ -3,11 +3,7 @@ body {
 	   and use the OS’s UI font as the website font
 	 */
   font: 100%/1.5 system-ui;
-}
 
-<style>
-  .shrunk-image {
-    width: 300px;
-    height: auto;
-  }
-</style>
+  max-width: 1200px;
+  margin: 0 auto;
+}
