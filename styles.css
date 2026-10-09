@@ -22,8 +22,19 @@ nav li {
 
 nav {
   display: flex;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  padding-inline: 0.5em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid oklch(80% 3% 200);
 }
 
 nav a {
   flex: 1;
+}
+
+.current {
+  border-bottom: 0.4em solid oklch(80% 3% 200);
+  padding-inline: 0.3em;
 }
