@@ -32,6 +32,7 @@ nav {
 
 nav a {
   flex: 1;
+  text-decoration: none;
 }
 
 .current {
