@@ -49,3 +49,10 @@ nav a:hover {
   border-bottom: 0.4em solid oklch(80% 3% 200);
   padding-inline: 0.3em;
 }
+
+form {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
