@@ -15,10 +15,10 @@ if (currentLink) {
 }
 
 let pages = [
-  { url: '', title: 'Home' },
-  { url: 'projects/', title: 'Projects' },
-  { url: 'resume/', title: 'Resume' },
-  { url: 'contact/', title: 'Contact' }
+  { https://caseehong.github.io/portfolio/index.html: '', title: 'Home' },
+  { https://caseehong.github.io/portfolio/projects/index.html: 'projects/', title: 'Projects' },
+  { https://caseehong.github.io/portfolio/resume/index.html: 'resume/', title: 'Resume' },
+  { https://caseehong.github.io/portfolio/contact/index.html: 'contact/', title: 'Contact' }
 ];
 
 let nav = document.createElement('nav');
