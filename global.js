@@ -79,14 +79,56 @@ for (let p of pages) {
 
 export async function fetchJSON(url) {
   try {
-    // Fetch the JSON file from the given URL
     const response = await fetch(url);
     if (!response.ok) {
-  throw new Error(`Failed to fetch projects: ${response.statusText}`);
-}
-  const data = await response.json();
-return data;
+      throw new Error(`Failed to fetch JSON: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
   } catch (error) {
     console.error('Error fetching or parsing JSON data:', error);
+    throw error;
+  }
+}
+
+export async function fetchGitHubData(username) {
+  return fetchJSON(`https://api.github.com/users/${username}`);
+}
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+  if (!Array.isArray(projects)) {
+    throw new TypeError('Projects must be provided as an array.');
+  }
+  if (!(containerElement instanceof Element)) {
+    throw new TypeError('A valid container element is required.');
+  }
+  if (!/^h[1-6]$/.test(headingLevel)) {
+    throw new RangeError('Heading level must be between h1 and h6.');
+  }
+  if (projects.some((project) => !project || typeof project !== 'object' || Array.isArray(project))) {
+    throw new TypeError('Each project must be an object.');
+  }
+
+  containerElement.innerHTML = '';
+
+  for (const project of projects) {
+    const article = document.createElement('article');
+    const heading = document.createElement(headingLevel);
+    const title = typeof project.title === 'string' && project.title.trim()
+      ? project.title
+      : 'Untitled project';
+    heading.textContent = title;
+    article.append(heading);
+
+    if (typeof project.image === 'string' && project.image.trim()) {
+      const image = document.createElement('img');
+      image.src = project.image;
+      image.alt = title;
+      article.append(image);
+    }
+
+    const description = document.createElement('p');
+    description.textContent = typeof project.description === 'string' ? project.description : '';
+    article.append(description);
+    containerElement.append(article);
   }
 }
