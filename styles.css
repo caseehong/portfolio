@@ -134,3 +134,9 @@ h3, h4, h5, h6 {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 }
+
+.projects img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
