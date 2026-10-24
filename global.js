@@ -121,7 +121,7 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
 
     if (typeof project.image === 'string' && project.image.trim()) {
       const image = document.createElement('img');
-      image.src = project.image;
+      image.src = new URL(project.image, import.meta.url).href;
       image.alt = title;
       article.append(image);
     }
