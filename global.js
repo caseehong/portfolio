@@ -126,9 +126,19 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
       article.append(image);
     }
 
+    const details = document.createElement('div');
     const description = document.createElement('p');
     description.textContent = typeof project.description === 'string' ? project.description : '';
-    article.append(description);
+    details.append(description);
+
+    if (typeof project.year === 'string' || typeof project.year === 'number') {
+      const year = document.createElement('p');
+      year.classList.add('project-year');
+      year.textContent = String(project.year);
+      details.append(year);
+    }
+
+    article.append(details);
     containerElement.append(article);
   }
 }
