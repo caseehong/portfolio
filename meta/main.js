@@ -19,6 +19,7 @@ function processCommits(data) {
     .map(([commit, lines]) => {
       const first = lines[0];
       const { author, date, time, timezone, datetime } = first;
+      const [hours, minutes, seconds] = time.split(':').map(Number);
       const result = {
         id: commit,
         url: `https://github.com/vis-society/lab-7/commit/${commit}`,
@@ -27,7 +28,7 @@ function processCommits(data) {
         time,
         timezone,
         datetime,
-        hourFrac: datetime.getHours() + datetime.getMinutes() / 60,
+        hourFrac: hours + minutes / 60 + seconds / 3600,
         totalLines: lines.length,
       };
 
@@ -90,6 +91,11 @@ function renderScatterPlot(data, commits) {
   .nice();
 
   const yScale = d3.scaleLinear().domain([0, 24]).range([height, 0]);
+  const timeColor = d3
+    .scaleLinear()
+    .domain([0, 5, 7, 17, 19, 24])
+    .range(['#42618f', '#42618f', '#e69a4b', '#e69a4b', '#42618f', '#42618f'])
+    .interpolate(d3.interpolateRgb);
 
   const dots = svg.append('g').attr('class', 'dots');
 
@@ -100,7 +106,7 @@ function renderScatterPlot(data, commits) {
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', 5)
-    .attr('fill', 'steelblue');
+    .attr('fill', (d) => timeColor(d.hourFrac));
 
     const margin = { top: 10, right: 10, bottom: 30, left: 20 };
 

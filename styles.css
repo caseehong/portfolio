@@ -190,6 +190,15 @@ form {
   grid-row: 2;
 }
 
+#chart .gridlines line {
+  stroke: currentColor;
+  stroke-opacity: 0.12;
+}
+
+#chart .gridlines path {
+  display: none;
+}
+
 article {
   grid-template-rows: subgrid;
   grid-row: span 3;
