@@ -141,6 +141,40 @@ form {
   margin-block: 2rem;
 }
 
+#stats .stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: column;
+  gap: 0.5em;
+  text-align: center;
+}
+
+#stats .stats dt,
+#profile-stats dt {
+  font-weight: 600;
+}
+
+#stats .stats dd,
+#profile-stats dd {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+@media (max-width: 700px) {
+  #stats .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+  }
+}
+
+@media (max-width: 450px) {
+  #stats .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, auto);
+  }
+}
+
 #profile-stats dl {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -150,13 +184,10 @@ form {
 
 #profile-stats dt {
   grid-row: 1;
-  font-weight: 600;
 }
 
 #profile-stats dd {
   grid-row: 2;
-  margin: 0;
-  font-size: 1.5em;
 }
 
 article {
