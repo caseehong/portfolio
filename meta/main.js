@@ -134,7 +134,4 @@ function renderScatterPlot(data, commits) {
 
 }
 
-let data = await loadData();
-let commits = processCommits(data);
-
 renderScatterPlot(data, commits);
