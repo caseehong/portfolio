@@ -106,7 +106,19 @@ function renderScatterPlot(data, commits) {
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', 5)
-    .attr('fill', (d) => timeColor(d.hourFrac));
+    .attr('fill', (d) => timeColor(d.hourFrac))
+    .on('mouseenter', (event, commit) => {
+      clearTimeout(tooltipHideTimer);
+      renderTooltipContent(commit);
+      updateTooltipVisibility(true);
+      updateTooltipPosition(event);
+    })
+    .on('mousemove', updateTooltipPosition)
+    .on('mouseleave', () => {
+      tooltipHideTimer = setTimeout(() => {
+        if (!tooltip.matches(':hover')) updateTooltipVisibility(false);
+      }, 100);
+    });
 
     const margin = { top: 10, right: 10, bottom: 30, left: 20 };
 
@@ -151,3 +163,46 @@ function renderScatterPlot(data, commits) {
 }
 
 renderScatterPlot(data, commits);
+
+function renderTooltipContent(commit) {
+  const link = document.getElementById('commit-link');
+  const date = document.getElementById('commit-date');
+
+  if (!commit || Object.keys(commit).length === 0) return;
+
+  link.href = commit.url;
+  link.textContent = commit.id;
+  date.textContent = commit.datetime?.toLocaleString('en', {
+    dateStyle: 'full',
+  });
+  document.getElementById('commit-time').textContent =
+    `${commit.time} ${commit.timezone}`;
+  document.getElementById('commit-author').textContent = commit.author;
+  document.getElementById('commit-lines').textContent = commit.totalLines;
+}
+
+function updateTooltipVisibility(isVisible) {
+  document.getElementById('commit-tooltip').hidden = !isVisible;
+}
+
+function updateTooltipPosition(event) {
+  const tooltip = document.getElementById('commit-tooltip');
+  const offset = 12;
+  const margin = 8;
+  const left = Math.min(
+    event.clientX + offset,
+    window.innerWidth - tooltip.offsetWidth - margin,
+  );
+  const top = Math.min(
+    event.clientY + offset,
+    window.innerHeight - tooltip.offsetHeight - margin,
+  );
+
+  tooltip.style.left = `${Math.max(margin, left)}px`;
+  tooltip.style.top = `${Math.max(margin, top)}px`;
+}
+
+let tooltipHideTimer;
+const tooltip = document.getElementById('commit-tooltip');
+tooltip.addEventListener('mouseenter', () => clearTimeout(tooltipHideTimer));
+tooltip.addEventListener('mouseleave', () => updateTooltipVisibility(false));
