@@ -199,6 +199,30 @@ form {
   display: none;
 }
 
+#chart .brush .selection {
+  fill: var(--color-accent);
+  fill-opacity: 0.2;
+  stroke: var(--color-accent);
+}
+
+#chart circle.selected {
+  fill: #ff6b6b;
+}
+
+#language-breakdown {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 1em;
+}
+
+#language-breakdown dt {
+  font-weight: 600;
+}
+
+#language-breakdown dd {
+  margin: 0;
+}
+
 #chart circle {
   transition: 200ms;
   transform-origin: center;
