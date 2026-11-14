@@ -3,7 +3,8 @@
         "title": "Persuasive or Deceptive Visualization? | Abortion Data",
         "year": "2026",
         "image": "images/dsc106project2.png",
-        "description": "This project explores the use of data visualization in the context of abortion data. It examines how visual representations can influence public perception and policy decisions, highlighting the importance of ethical considerations in data presentation."
+        "description": "This project explores the use of data visualization in the context of abortion data. It examines how visual representations can influence public perception and policy decisions, highlighting the importance of ethical considerations in data presentation.",
+        "url": "https://koberhauser.github.io/dsc106-project2/"
     },
     {
         "title": "Expository Visualization",
@@ -15,13 +16,15 @@
         "title": "The Recipe to A Good Rating",
         "year": "2026",
         "image": "images/dsc80project.png",
-        "description": "This project uses linear regression, data visualization, and predictive modeling to analyze the factors that contribute to a good rating for a product or service. It aims to identify key variables and provide actionable insights for improving customer satisfaction."
+        "description": "This project uses linear regression, data visualization, and predictive modeling to analyze the factors that contribute to a good rating for a product or service. It aims to identify key variables and provide actionable insights for improving customer satisfaction.",
+        "url": "https://caseehong.github.io/recipe-ratings-and-time/"
     },
     {
-        "title": "Eligendi, perferendis. At, dolore?",
-        "year": "2025",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Ullam nostrum qui cumque ut non, blanditiis sed. Modi voluptatibus dolorem quibusdam at officia aliquam minus dolores atque magni, culpa assumenda eius nobis? Laudantium beatae quibusdam hic dignissimos adipisci temporibus."
+        "title": "Busy Biking",
+        "year": "2026",
+        "image": "images/busy-biking.png",
+        "description": "An interactive map of Boston that visualizes bike traffic at different times of the day.",
+        "url": "https://caseehong.github.io/busy-biking/"
     },
     {
         "title": "Dicta, assumenda excepturi! Ipsa.",
