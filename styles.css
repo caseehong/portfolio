@@ -161,6 +161,30 @@ form {
   font-size: 1.5em;
 }
 
+.commit-filter {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  margin-block: 1em;
+}
+
+.commit-filter label {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 0.75em;
+}
+
+#commit-progress {
+  flex: 1;
+  min-width: 5rem;
+}
+
+#commit-time {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
 @media (max-width: 700px) {
   #stats .stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -227,6 +251,10 @@ form {
   transition: 200ms;
   transform-origin: center;
   transform-box: fill-box;
+
+  @starting-style {
+    r: 0;
+  }
 }
 
 #chart circle:hover {
