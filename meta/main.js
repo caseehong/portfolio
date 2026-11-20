@@ -280,3 +280,13 @@ let tooltipHideTimer;
 const tooltip = document.getElementById('commit-tooltip');
 tooltip.addEventListener('mouseenter', () => clearTimeout(tooltipHideTimer));
 tooltip.addEventListener('mouseleave', () => updateTooltipVisibility(false));
+
+let commitProgress = 100;
+let timeScale = d3
+  .scaleTime()
+  .domain([
+    d3.min(commits, (d) => d.datetime),
+    d3.max(commits, (d) => d.datetime),
+  ])
+  .range([0, 100]);
+let commitMaxTime = timeScale.invert(commitProgress);
