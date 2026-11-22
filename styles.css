@@ -161,30 +161,6 @@ form {
   font-size: 1.5em;
 }
 
-.commit-filter {
-  display: flex;
-  flex: 1;
-  align-items: baseline;
-  margin-block: 1em;
-}
-
-.commit-filter label {
-  display: flex;
-  flex: 1;
-  align-items: baseline;
-  gap: 0.75em;
-}
-
-#commit-progress {
-  flex: 1;
-  min-width: 5rem;
-}
-
-#commit-time {
-  margin-left: auto;
-  white-space: nowrap;
-}
-
 #files {
   display: grid;
   grid-template-columns: 1fr 4fr;
@@ -226,32 +202,41 @@ form {
   background: var(--color);
 }
 
-#scrolly-1 {
+#scrolly-1,
+#scrolly-2 {
   position: relative;
   display: flex;
   gap: 1rem;
 }
 
-#scrolly-1 > * {
+#scrolly-1 > *,
+#scrolly-2 > * {
   flex: 1;
   min-width: 0;
 }
 
-#scatter-story {
+#scatter-story,
+#file-story {
   position: relative;
 }
 
-#scatter-story .step {
+#scatter-story .step,
+#file-story .step {
   min-height: 50vh;
   padding-block: 1rem 30vh;
 }
 
-#scatter-plot {
+#scatter-plot,
+#file-plot {
   position: sticky;
   top: 0;
   left: 0;
   bottom: auto;
   height: 50vh;
+}
+
+#file-plot {
+  overflow-y: auto;
 }
 
 #scatter-plot #chart svg {

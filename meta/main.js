@@ -80,15 +80,6 @@ const colors = d3
   .scaleOrdinal(d3.schemeTableau10)
   .domain([...new Set(data.map((line) => line.type))]);
 let filteredCommits = commits;
-let commitProgress = 100;
-const timeScale = d3
-  .scaleTime()
-  .domain([
-    d3.min(commits, (d) => d.datetime),
-    d3.max(commits, (d) => d.datetime),
-  ])
-  .range([0, 100]);
-let commitMaxTime = timeScale.invert(commitProgress);
 let brushSelection = null;
 console.log(commits);
 
@@ -339,22 +330,14 @@ function updateFileDisplay(commits) {
     .attr('aria-hidden', 'true');
 }
 
-function updateCommitFilter(maxTime) {
-  commitMaxTime = maxTime;
-  commitProgress = timeScale(maxTime);
-  document.getElementById('commit-progress').value = String(commitProgress);
-  document.getElementById('commit-time').textContent =
-    commitMaxTime.toLocaleString('en', {
-      dateStyle: 'long',
-      timeStyle: 'short',
-    });
-  filteredCommits = commits.filter((commit) => commit.datetime <= commitMaxTime);
+function updateScatterStory(maxTime) {
+  filteredCommits = commits.filter((commit) => commit.datetime <= maxTime);
   updateScatterPlot(filteredCommits);
   updateFileDisplay(filteredCommits);
 }
 
-function renderScatterStory(commits) {
-  d3.select('#scatter-story')
+function renderCommitStory(selector, commits) {
+  d3.select(selector)
     .selectAll('.step')
     .data(commits, (commit) => commit.id)
     .join('div')
@@ -379,7 +362,8 @@ function renderScatterStory(commits) {
 }
 
 renderScatterPlot(data, commits);
-renderScatterStory(commits);
+renderCommitStory('#scatter-story', commits);
+renderCommitStory('#file-story', commits);
 
 function renderTooltipContent(commit) {
   const link = document.getElementById('commit-link');
@@ -424,25 +408,32 @@ const tooltip = document.getElementById('commit-tooltip');
 tooltip.addEventListener('mouseenter', () => clearTimeout(tooltipHideTimer));
 tooltip.addEventListener('mouseleave', () => updateTooltipVisibility(false));
 
-function onTimeSliderChange() {
-  const slider = document.getElementById('commit-progress');
-  updateCommitFilter(timeScale.invert(Number(slider.value)));
-}
-
-document
-  .getElementById('commit-progress')
-  .addEventListener('input', onTimeSliderChange);
-onTimeSliderChange();
-
 function onStepEnter({ element }) {
-  updateCommitFilter(element.__data__.datetime);
+  updateScatterStory(element.__data__.datetime);
 }
 
-const scroller = scrollama();
-scroller
+function onFileStepEnter({ element }) {
+  const maxTime = element.__data__.datetime;
+  updateFileDisplay(commits.filter((commit) => commit.datetime <= maxTime));
+}
+
+const scatterScroller = scrollama();
+scatterScroller
   .setup({
     container: '#scrolly-1',
     step: '#scrolly-1 .step',
   })
   .onStepEnter(onStepEnter);
-window.addEventListener('resize', () => scroller.resize());
+
+const fileScroller = scrollama();
+fileScroller
+  .setup({
+    container: '#scrolly-2',
+    step: '#scrolly-2 .step',
+  })
+  .onStepEnter(onFileStepEnter);
+
+window.addEventListener('resize', () => {
+  scatterScroller.resize();
+  fileScroller.resize();
+});
