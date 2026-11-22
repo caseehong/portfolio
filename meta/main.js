@@ -1,4 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 let xScale;
 let yScale;
@@ -43,7 +44,8 @@ function processCommits(data) {
       });
 
       return result;
-    });
+    })
+    .sort((a, b) => a.datetime - b.datetime);
 }
 
 function renderCommitInfo(data, commits) {
@@ -337,7 +339,47 @@ function updateFileDisplay(commits) {
     .attr('aria-hidden', 'true');
 }
 
+function updateCommitFilter(maxTime) {
+  commitMaxTime = maxTime;
+  commitProgress = timeScale(maxTime);
+  document.getElementById('commit-progress').value = String(commitProgress);
+  document.getElementById('commit-time').textContent =
+    commitMaxTime.toLocaleString('en', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    });
+  filteredCommits = commits.filter((commit) => commit.datetime <= commitMaxTime);
+  updateScatterPlot(filteredCommits);
+  updateFileDisplay(filteredCommits);
+}
+
+function renderScatterStory(commits) {
+  d3.select('#scatter-story')
+    .selectAll('.step')
+    .data(commits, (commit) => commit.id)
+    .join('div')
+    .attr('class', 'step')
+    .html(
+      (commit, index) => `
+        <p>On ${commit.datetime.toLocaleString('en', {
+          dateStyle: 'full',
+          timeStyle: 'short',
+        })}, I made <a href="${commit.url}" target="_blank" rel="noopener noreferrer">${
+          index > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
+        }</a>.</p>
+        <p>I edited ${commit.totalLines} lines across ${
+          d3.rollups(
+            commit.lines,
+            (lines) => lines.length,
+            (line) => line.file,
+          ).length
+        } files. Then I looked over all I had made, and I saw that it was very good.</p>
+      `,
+    );
+}
+
 renderScatterPlot(data, commits);
+renderScatterStory(commits);
 
 function renderTooltipContent(commit) {
   const link = document.getElementById('commit-link');
@@ -384,19 +426,23 @@ tooltip.addEventListener('mouseleave', () => updateTooltipVisibility(false));
 
 function onTimeSliderChange() {
   const slider = document.getElementById('commit-progress');
-  commitProgress = Number(slider.value);
-  commitMaxTime = timeScale.invert(commitProgress);
-  document.getElementById('commit-time').textContent =
-    commitMaxTime.toLocaleString('en', {
-      dateStyle: 'long',
-      timeStyle: 'short',
-    });
-  filteredCommits = commits.filter((commit) => commit.datetime <= commitMaxTime);
-  updateScatterPlot(filteredCommits);
-  updateFileDisplay(filteredCommits);
+  updateCommitFilter(timeScale.invert(Number(slider.value)));
 }
 
 document
   .getElementById('commit-progress')
   .addEventListener('input', onTimeSliderChange);
 onTimeSliderChange();
+
+function onStepEnter({ element }) {
+  updateCommitFilter(element.__data__.datetime);
+}
+
+const scroller = scrollama();
+scroller
+  .setup({
+    container: '#scrolly-1',
+    step: '#scrolly-1 .step',
+  })
+  .onStepEnter(onStepEnter);
+window.addEventListener('resize', () => scroller.resize());
