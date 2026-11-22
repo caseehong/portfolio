@@ -185,6 +185,47 @@ form {
   white-space: nowrap;
 }
 
+#files {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 0.25em 1em;
+}
+
+#files > div {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+}
+
+#files dt {
+  grid-column: 1;
+}
+
+#files dt small {
+  display: block;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+#files dd {
+  display: flex;
+  grid-column: 2;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 0.15em;
+  margin: 0;
+  padding-top: 0.6em;
+}
+
+.loc {
+  display: flex;
+  width: 0.5em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color);
+}
+
 @media (max-width: 700px) {
   #stats .stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -74,6 +74,9 @@ function renderCommitInfo(data, commits) {
 
 const data = await loadData();
 const commits = processCommits(data);
+const colors = d3
+  .scaleOrdinal(d3.schemeTableau10)
+  .domain([...new Set(data.map((line) => line.type))]);
 let filteredCommits = commits;
 let commitProgress = 100;
 const timeScale = d3
@@ -301,6 +304,39 @@ function renderLanguageBreakdown(selection) {
   }
 }
 
+function updateFileDisplay(commits) {
+  const lines = commits.flatMap((commit) => commit.lines);
+  const files = d3
+    .groups(lines, (line) => line.file)
+    .map(([name, fileLines]) => ({ name, lines: fileLines }))
+    .sort((a, b) => b.lines.length - a.lines.length);
+
+  const filesContainer = d3
+    .select('#files')
+    .selectAll(':scope > div')
+    .data(files, (file) => file.name)
+    .join((enter) =>
+      enter.append('div').call((div) => {
+        div.append('dt').append('code');
+        div.select('dt').append('small');
+        div.append('dd');
+      }),
+    );
+
+  filesContainer.select('dt > code').text((file) => file.name);
+  filesContainer
+    .select('dt > small')
+    .text((file) => `${file.lines.length} lines`);
+  filesContainer
+    .select('dd')
+    .selectAll('div.loc')
+    .data((file) => file.lines)
+    .join('div')
+    .attr('class', 'loc')
+    .style('--color', (line) => colors(line.type))
+    .attr('aria-hidden', 'true');
+}
+
 renderScatterPlot(data, commits);
 
 function renderTooltipContent(commit) {
@@ -357,6 +393,7 @@ function onTimeSliderChange() {
     });
   filteredCommits = commits.filter((commit) => commit.datetime <= commitMaxTime);
   updateScatterPlot(filteredCommits);
+  updateFileDisplay(filteredCommits);
 }
 
 document
